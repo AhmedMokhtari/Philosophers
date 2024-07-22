@@ -21,10 +21,13 @@ bool	is_num(char s)
 bool	ret_boolean(t_data *data, bool set)
 {
 		bool val;
+		// printf("ennter 2 \n");
 		
 		pthread_mutex_lock(&data->bool_lock);
 		val = set;
 		pthread_mutex_unlock(&data->bool_lock);
+		// printf("sort 2 \n");
+
 		return (val);
 }
 
@@ -32,9 +35,12 @@ bool	ret_boolean(t_data *data, bool set)
 
 void	set_boolean(t_data *data, bool *set, bool val)
 {
-		pthread_mutex_lock(&data->bool_lock);
+		// printf("ennter \n");
+		pthread_mutex_lock(&data->bool_lock1);
 		*set = val;
-		pthread_mutex_unlock(&data->bool_lock);
+		pthread_mutex_unlock(&data->bool_lock1);
+		// printf("sort \n");
+
 }
 
 void	set_long(t_data *data, long *set, long val)
@@ -167,6 +173,7 @@ void	ft_usleep(long mili, t_data *data)
 	// printf("usleep ----------<<<<.>>>>\n");
 	while (time_now() - i < mili)
 	{
+		// printf("usleep ----------<<<<.>>>>\n");	
 		if (ret_boolean(data,data->is_end))
 			break ;
 		usleep(1);
@@ -222,21 +229,21 @@ void	print_state(t_state state, t_philo *philo)
 	// 	//printf("fgdf 2222222\n");
 	// 	return ;
 	// }
-	pthread_mutex_unlock(&philo->data->write);
-	// if (state == taking_fork1 && !ret_boolean(philo->data, philo->data->is_end))
-	if (state == taking_fork1)
+	pthread_mutex_lock(&philo->data->write);
+	// if (state == taking_fork1)
+	if (state == taking_fork1 && !ret_boolean(philo->data, philo->data->is_end))
 		printf("%-6ld %-6d has taken a fork 1 \n", time_span, philo->id);
-	// else if (state == taking_fork2 && !ret_boolean(philo->data, philo->data->is_end))
-	else if (state == taking_fork2)
+	// else if (state == taking_fork2)
+	else if (state == taking_fork2 && !ret_boolean(philo->data, philo->data->is_end))
 		printf("%-6ld %-6d has taken a fork 2\n", time_span, philo->id);
-	// else if (state == eating && ! ret_boolean(philo->data, philo->data->is_end))
-	else if (state == eating)
+	// else if (state == eating)
+	else if (state == eating && !ret_boolean(philo->data, philo->data->is_end))
 		printf("%-6ld %-6d is eating\n", time_span, philo->id);
-	// else if (state == sleeping && ! ret_boolean(philo->data, philo->data->is_end))
-	else if (state == sleeping)
+	// else if (state == sleeping)
+	else if (state == sleeping && !ret_boolean(philo->data, philo->data->is_end))
 		printf("%-6ld %-6d is sleeping\n", time_span, philo->id);
-	// else if (state == thinking && ! ret_boolean(philo->data, philo->data->is_end))
-	else if (state == thinking)
+	// else if (state == thinking)
+	else if (state == thinking && !ret_boolean(philo->data, philo->data->is_end))
 		printf("%-6ld %-6d is thinking\n", time_span, philo->id);
 	else if (state == dead)
 		printf("%-6ld %-6d dead allah yar7hmo\n", time_span, philo->id);
@@ -252,9 +259,9 @@ void	eat(t_philo *philo)
 	// philo->last_meal = time_now();
 	ft_usleep(philo->data->time_eat, philo->data);
 	set_long(philo->data, &philo->last_meal,time_now() - start);
-	pthread_mutex_lock(&philo->data->bool_lock);
-	philo->meals_eat++;
-	pthread_mutex_unlock(&philo->data->bool_lock);
+	// pthread_mutex_lock(&philo->data->bool_lock1);
+	// philo->meals_eat++;
+	// pthread_mutex_unlock(&philo->data->bool_lock1);
 	// if (ret_long(philo->data, philo->meals_eat) == ret_long(philo->data, philo->data->nb_meals))
 	// {
 	// 	printf("here %d %ld %ld\n", philo->id, ret_long(philo->data, philo->meals_eat),ret_long(philo->data, philo->data->nb_meals));
@@ -265,9 +272,9 @@ void	eat(t_philo *philo)
 void	*philo_life(void *data)
 {
 	t_philo	*philo;
-	bool	b;
+	// bool	b;
 
-	b = false;
+	// b = false;
 	philo = (t_philo *)data;
 	if (philo->id % 2 == 0)
 		ft_usleep(10, philo->data);
@@ -278,14 +285,14 @@ void	*philo_life(void *data)
 		// if (ret_boolean(philo->data, philo->is_full) || ret_boolean(philo->data, philo->data->is_end) || ret_boolean(philo->data, philo->is_dead))
 		// 	break ;
 		pthread_mutex_lock(philo->left_fork);
-		print_state(taking_fork1, philo);
 		pthread_mutex_lock(philo->right_fork);
+		print_state(taking_fork1, philo);
 		print_state(taking_fork2, philo);
 		eat(philo);
 		if (philo->is_full || ret_boolean(philo->data, philo->data->is_end))
 		{
 			//printf("dfgdfg \n");
-			// pthread_mutex_unlock(philo->left_fork);
+			pthread_mutex_unlock(philo->left_fork);
 			// 
 			pthread_mutex_unlock(philo->right_fork);
 			break ;
@@ -324,9 +331,9 @@ void	check_dead(t_data *data)
 				// printf("geerer\n");
 				// set_boolean(data, &data->philo[i].is_dead, true);
 				// pthread_mutex_lock(&data->bool_lock);
+				print_state(dead, &data->philo[i]);
 				set_boolean(data, &data->is_end, true);
 				// pthread_mutex_unlock(&data->bool_lock);
-				print_state(dead, &data->philo[i]);
 				return ;
 			}
 			i++;
@@ -363,6 +370,10 @@ int main(int argc, char *argv[])
 	handle_input(data, argv);
 	data_init(data);
 	start_dinner(data);
+	pthread_mutex_destroy(&data->lock);
+	pthread_mutex_destroy(&data->bool_lock);
+	pthread_mutex_destroy(&data->bool_lock1);
+	pthread_mutex_destroy(&data->write);
 	// printf("nb philo %d time die %d time eat %d time sleep %d nb meals %d\n",data.nb_philo, data.time_die, data.time_eat, data.time_die, data.nb_meals);
 	return (0);
 }
