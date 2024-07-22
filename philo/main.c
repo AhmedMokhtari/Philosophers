@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:17 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/22 16:50:46 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/22 18:15:31 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ bool	ret_boolean(t_data *data, bool set)
 		bool val;
 		// printf("ennter 2 \n");
 		
-		pthread_mutex_lock(&data->bool_lock);
+		pthread_mutex_lock(&data->bool_lock1);
 		val = set;
-		pthread_mutex_unlock(&data->bool_lock);
+		pthread_mutex_unlock(&data->bool_lock1);
 		// printf("sort 2 \n");
 
 		return (val);
@@ -168,7 +168,7 @@ void	ft_usleep(long mili, t_data *data)
 {
 	long	i;
 
-	(void)data;
+	// (void)data;
 	i = time_now();
 	// printf("usleep ----------<<<<.>>>>\n");
 	while (time_now() - i < mili)
@@ -196,7 +196,7 @@ void	data_init(t_data *data)
 	pthread_mutex_init(&data->bool_lock, NULL);
 	pthread_mutex_init(&data->bool_lock1, NULL);
 	pthread_mutex_init(&data->write, NULL);
-	while (i < data->nb_meals)
+	while (i < data->nb_philo)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
 		i++;
@@ -332,7 +332,10 @@ void	check_dead(t_data *data)
 				// set_boolean(data, &data->philo[i].is_dead, true);
 				// pthread_mutex_lock(&data->bool_lock);
 				print_state(dead, &data->philo[i]);
-				set_boolean(data, &data->is_end, true);
+				pthread_mutex_lock(&data->bool_lock);
+				data->is_end = true;
+				// set_boolean(data, &data->is_end, true);
+				pthread_mutex_unlock(&data->bool_lock);
 				// pthread_mutex_unlock(&data->bool_lock);
 				return ;
 			}
@@ -361,7 +364,9 @@ void	start_dinner(t_data *data)
 int main(int argc, char *argv[])
 {
 	t_data	*data;
+	int		i;
 
+	i = 0;
 	data = malloc(sizeof(t_data));
 	if (!data)
 		ft_printerror("moel-fat l7imari\n");
@@ -374,6 +379,11 @@ int main(int argc, char *argv[])
 	pthread_mutex_destroy(&data->bool_lock);
 	pthread_mutex_destroy(&data->bool_lock1);
 	pthread_mutex_destroy(&data->write);
+	while (i < data->nb_philo)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
 	// printf("nb philo %d time die %d time eat %d time sleep %d nb meals %d\n",data.nb_philo, data.time_die, data.time_eat, data.time_die, data.nb_meals);
 	return (0);
 }
