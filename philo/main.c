@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:17 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/22 18:15:31 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/23 08:18:31 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ bool	ret_boolean(t_data *data, bool set)
 		bool val;
 		// printf("ennter 2 \n");
 		
-		pthread_mutex_lock(&data->bool_lock1);
+		pthread_mutex_lock(&data->lock);
 		val = set;
-		pthread_mutex_unlock(&data->bool_lock1);
+		pthread_mutex_unlock(&data->lock);
 		// printf("sort 2 \n");
 
 		return (val);
@@ -36,9 +36,9 @@ bool	ret_boolean(t_data *data, bool set)
 void	set_boolean(t_data *data, bool *set, bool val)
 {
 		// printf("ennter \n");
-		pthread_mutex_lock(&data->bool_lock1);
+		pthread_mutex_lock(&data->bool_lock);
 		*set = val;
-		pthread_mutex_unlock(&data->bool_lock1);
+		pthread_mutex_unlock(&data->bool_lock);
 		// printf("sort \n");
 
 }
@@ -211,8 +211,8 @@ void	data_init(t_data *data)
 		data->philo[i].is_full = 0;
 		//pthread_mutex_init(&data->forks[i], NULL);
 		data->philo[i].id = i + 1;
-		data->philo[i].left_fork = &data->forks[i];
-		data->philo[i].right_fork = &data->forks[(i + 1) % data->nb_philo];
+		data->philo[i].right_fork = &data->forks[i];
+		data->philo[i].left_fork = &data->forks[(i + 1) % data->nb_philo];
 		i++;
 	}
 }
