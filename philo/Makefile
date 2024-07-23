@@ -1,6 +1,6 @@
 NAME = philo
 
-FILES = main.c
+FILES = main.c init.c wrapper.c tool.c mutex_set_ret.c tool1.c philo_op.c
 
 OBJECT = $(FILES:%.c=%.o)
 

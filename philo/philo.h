@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/23 16:40:28 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:09:03 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,23 @@ typedef struct s_philo
 	pthread_mutex_t	*left_fork;
 	t_data			*data;
 }	t_philo;
+
+void	data_init(t_data *data);
+void	ft_printerror(char *s);
+void	*ft_malloc(size_t size);
+int		ft_atoi(char *s);
+bool	is_space(char s);
+bool	is_valid(char *str);
+bool	is_num(char s);
+bool	ret_boolean(t_data *data, bool *set);
+void	set_boolean(t_data *data, bool *set, bool val);
+void	set_long(t_data *data, long *set, long val);
+long	ret_long(t_data *data, long *set);
+void	ft_usleep(long mili, t_data *data);
+long	time_now(void);
+void	handle_input(t_data *data, char **argv);
+void	eat(t_philo *philo);
+void	*philo_life(void *data);
+void	print_state(t_state state, t_philo *philo);
 
 #endif
