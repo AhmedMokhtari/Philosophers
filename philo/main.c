@@ -288,6 +288,8 @@ void	*philo_life(void *data)
 			break ;
 		pthread_mutex_lock(philo->left_fork);
 		print_state(taking_fork1, philo);
+		if (philo->data->nb_philo == 1)
+			return (pthread_mutex_unlock(philo->left_fork), NULL);
 		pthread_mutex_lock(philo->right_fork);
 		print_state(taking_fork2, philo);
 		eat(philo);
@@ -329,8 +331,6 @@ void	check_dead(t_data *data)
 			{
 				set_boolean(data, &data->is_end, true);
 				print_state(dead, &data->philo[i]);
-				if (data->nb_philo == 1)
-					pthread_mutex_unlock(data->philo[i].left_fork);
 				return ;
 			}
 			i++;
