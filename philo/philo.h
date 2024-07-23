@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/22 15:21:54 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:40:28 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ typedef struct s_philo
 	int				id;
 	long			last_meal;
 	bool			is_full;
-	bool			is_dead;
-	int				meals_eat;
+	long			meals_eat;
 	pthread_t		id_thread;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
