@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/23 18:09:03 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:01:45 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <limits.h>
 # include <sys/time.h>
 
-typedef struct s_philo t_philo;
+typedef struct s_philo	t_philo;
 
 typedef struct s_data
 {
@@ -32,11 +32,11 @@ typedef struct s_data
 	long			nb_meals;
 	long			start_time;
 	bool			is_end;
-	pthread_mutex_t *forks;
-	pthread_mutex_t lock;
-	pthread_mutex_t bool_lock;
-	pthread_mutex_t bool_lock1;
-	pthread_mutex_t write;
+	bool			is_failed;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	lock;
+	pthread_mutex_t	bool_lock;
+	pthread_mutex_t	write;
 	t_philo			*philo;
 }	t_data;
 
@@ -62,9 +62,9 @@ typedef struct s_philo
 	t_data			*data;
 }	t_philo;
 
-void	data_init(t_data *data);
-void	ft_printerror(char *s);
-void	*ft_malloc(size_t size);
+bool	data_init(t_data *data);
+void	ft_printerror(char *s, t_data *data, int len);
+void	error(char *s);
 int		ft_atoi(char *s);
 bool	is_space(char s);
 bool	is_valid(char *str);
@@ -75,9 +75,10 @@ void	set_long(t_data *data, long *set, long val);
 long	ret_long(t_data *data, long *set);
 void	ft_usleep(long mili, t_data *data);
 long	time_now(void);
-void	handle_input(t_data *data, char **argv);
+bool	handle_input(t_data *data, char **argv);
 void	eat(t_philo *philo);
 void	*philo_life(void *data);
 void	print_state(t_state state, t_philo *philo);
+void	ft_clean(t_data *data);
 
 #endif

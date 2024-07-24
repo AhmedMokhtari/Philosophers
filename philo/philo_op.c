@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:02:31 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/23 18:18:28 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:48:34 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void	eat(t_philo *philo)
 	print_state(eating, philo);
 	ft_usleep(philo->data->time_eat, philo->data);
 	set_long(philo->data, &philo->last_meal, time_now() - start);
-	pthread_mutex_lock(&philo->data->bool_lock1);
+	pthread_mutex_lock(&philo->data->lock);
 	philo->meals_eat++;
-	pthread_mutex_unlock(&philo->data->bool_lock1);
+	pthread_mutex_unlock(&philo->data->lock);
 	b = ret_long(philo->data, &philo->data->nb_meals) != -1;
 	if (b)
 		meals_eat = ret_long(philo->data, &philo->meals_eat);
@@ -60,12 +60,15 @@ void	eat(t_philo *philo)
 		set_boolean(philo->data, &philo->is_full, true);
 }
 
-void	*philo_eat(t_philo *philo)
+int	philo_eat(t_philo *philo)
 {
+	if (ret_boolean(philo->data, &philo->is_full)
+		|| ret_boolean(philo->data, &philo->data->is_end))
+		return (1);
 	pthread_mutex_lock(philo->left_fork);
 	print_state(taking_fork1, philo);
 	if (philo->data->nb_philo == 1)
-		return (pthread_mutex_unlock(philo->left_fork), NULL);
+		return (pthread_mutex_unlock(philo->left_fork), 0);
 	pthread_mutex_lock(philo->right_fork);
 	print_state(taking_fork2, philo);
 	eat(philo);
@@ -73,32 +76,32 @@ void	*philo_eat(t_philo *philo)
 	{
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
-		return ((void *)42);
+		return (1);
 	}
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
-	return (philo);
+	return (2);
 }
 
 void	*philo_life(void *data)
 {
 	t_philo	*philo;
-	void	*ret;
+	int		ret;
 
 	philo = (t_philo *)data;
-	while (ret_long(philo->data, &philo->data->start_time) == 0)
+	while (ret_long(philo->data, &philo->data->start_time) == 0
+		&& !ret_boolean(data, &philo->data->is_failed))
 		;
+	if (ret_boolean(data, &philo->data->is_failed))
+		return (NULL);
 	if (philo->id % 2 == 0)
-		ft_usleep(10, philo->data);
+		ft_usleep(philo->data->time_eat, philo->data);
 	while (true)
 	{
-		if (ret_boolean(philo->data, &philo->is_full)
-			|| ret_boolean(philo->data, &philo->data->is_end))
-			break ;
 		ret = philo_eat(philo);
-		if (!ret)
+		if (ret == 0)
 			return (NULL);
-		else if (ret == (void *)42)
+		else if (ret == 1)
 			break ;
 		print_state(sleeping, philo);
 		ft_usleep(philo->data->time_sleep, philo->data);

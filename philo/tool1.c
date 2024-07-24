@@ -6,11 +6,21 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:58:01 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/23 17:58:22 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:51:41 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+long	time_now(void)
+{
+	struct timeval	val;
+	long			time;
+
+	gettimeofday(&val, NULL);
+	time = (val.tv_sec * 1000) + (val.tv_usec / 1000);
+	return (time);
+}
 
 void	ft_usleep(long mili, t_data *data)
 {

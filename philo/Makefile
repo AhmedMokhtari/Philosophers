@@ -1,12 +1,12 @@
 NAME = philo
 
-FILES = main.c init.c wrapper.c tool.c mutex_set_ret.c tool1.c philo_op.c
+FILES = main.c init.c tool.c mutex_set_ret.c tool1.c philo_op.c
 
 OBJECT = $(FILES:%.c=%.o)
 
 CC = cc
 
-CFLAGS = -pthread -Wall -Wextra -Werror -g #-fsanitize=thread #-fsanitize=address
+CFLAGS = -pthread -Wall -Wextra -Werror -g -fsanitize=address #-fsanitize=thread 
 
 all : $(NAME)
 

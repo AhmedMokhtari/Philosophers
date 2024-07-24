@@ -6,13 +6,35 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:22:48 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/23 18:00:44 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/24 10:51:21 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_printerror(char *s)
+void	ft_printerror(char *s, t_data *data, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
+	free(data->philo);
+	free(data->forks);
+	free(data);
+	i = 0;
+	while (s[i])
+	{
+		write(2, &s[i], 1);
+		i++;
+	}
+	write(2, "\n", 1);
+}
+
+void	error(char *s)
 {
 	int	i;
 
@@ -23,7 +45,6 @@ void	ft_printerror(char *s)
 		i++;
 	}
 	write(2, "\n", 1);
-	exit(EXIT_FAILURE);
 }
 
 int	ft_atoi(char *s)
@@ -43,7 +64,7 @@ int	ft_atoi(char *s)
 		{
 			sum = (sum * 10) + (s[i] - '0');
 			if (sum > INT_MAX)
-				ft_printerror("error in args INT Max");
+				return (error("error in args INT Max"), -1);
 		}
 		i++;
 	}
@@ -62,14 +83,4 @@ bool	is_num(char s)
 	if (s >= '0' && s <= '9')
 		return (true);
 	return (false);
-}
-
-long	time_now(void)
-{
-	struct timeval	val;
-	long			time;
-
-	gettimeofday(&val, NULL);
-	time = (val.tv_sec * 1000) + (val.tv_usec / 1000);
-	return (time);
 }
