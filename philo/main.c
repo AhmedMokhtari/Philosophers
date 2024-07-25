@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:17 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/24 11:00:36 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/25 08:58:56 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	check_dead(t_data *data)
 				full = false;
 			last_meal = &data->philo[i].last_meal;
 			time = time_now() - ret_long(data, last_meal) - data->start_time;
-			if (time >= data->time_die)
+			if (time > data->time_die)
 			{
 				set_boolean(data, &data->is_end, true);
 				print_state(dead, &data->philo[i]);
@@ -54,6 +54,7 @@ bool	start_dinner(t_data *data)
 		if (pthread_create(t, NULL, philo_life, &data->philo[i]))
 		{
 			set_boolean(data, &data->is_failed, true);
+			set_long(data, &data->start_time, time_now());
 			return (error("pthread_create Failed "), false);
 		}
 		i++;
@@ -98,6 +99,7 @@ int	main(int argc, char *argv[])
 	int		i;
 
 	i = 0;
+	// atexit(ex);
 	if (argc < 5 || argc > 6)
 		return (write(2, "number argument error ", 22), -1);
 	data = malloc(sizeof(t_data));
