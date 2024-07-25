@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:02:31 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/25 08:58:19 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:04:22 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,9 @@ void	*philo_life(void *data)
 	int		ret;
 
 	philo = (t_philo *)data;
-		// && !ret_boolean(data, &philo->data->is_failed))
 	while (ret_long(philo->data, &philo->data->start_time) == 0)
 		;
-	if (ret_boolean(data, &philo->data->is_failed))
+	if (ret_boolean(philo->data, &philo->data->is_failed))
 		return (NULL);
 	if (philo->id % 2 == 0)
 		ft_usleep(philo->data->time_eat, philo->data);

@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:17 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/25 08:58:56 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:12:36 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void	check_dead(t_data *data)
 
 	while (!ret_boolean(data, &data->is_end))
 	{
-		i = -1;
-		full = true;
+		(1) && (i = -1, full = true);
 		while (++i < data->nb_philo)
 		{
 			if (ret_boolean(data, &data->philo[i].is_full) == false)
@@ -38,6 +37,7 @@ void	check_dead(t_data *data)
 		}
 		if (full)
 			set_boolean(data, &data->is_end, true);
+		ft_usleep(1, data);
 	}
 }
 
@@ -55,6 +55,8 @@ bool	start_dinner(t_data *data)
 		{
 			set_boolean(data, &data->is_failed, true);
 			set_long(data, &data->start_time, time_now());
+			printf("you can't create more than %d thread bro \n",i + 1);
+			ft_clean_mutex(data, i);
 			return (error("pthread_create Failed "), false);
 		}
 		i++;
@@ -88,6 +90,25 @@ void	ft_clean(t_data *data)
 	free(data);
 }
 
+void	ft_clean_mutex(t_data *data, int nb_p)
+{
+	int	i;
+
+	i = 0;
+	pthread_mutex_destroy(&data->lock);
+	pthread_mutex_destroy(&data->bool_lock);
+	pthread_mutex_destroy(&data->write);
+	while (i < nb_p)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
+	free(data->philo);
+	free(data->forks);
+	free(data);
+}
+
+
 void	ex(void)
 {
 	system("leaks philo");
@@ -99,7 +120,6 @@ int	main(int argc, char *argv[])
 	int		i;
 
 	i = 0;
-	// atexit(ex);
 	if (argc < 5 || argc > 6)
 		return (write(2, "number argument error ", 22), -1);
 	data = malloc(sizeof(t_data));
@@ -112,7 +132,7 @@ int	main(int argc, char *argv[])
 	if (!data_init(data))
 		return (-1);
 	if (!start_dinner(data))
-		return (ft_clean(data), -1);
+		return (-1);
 	ft_clean(data);
 	return (0);
 }

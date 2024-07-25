@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/24 11:01:45 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:59:48 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	ft_printerror(char *s, t_data *data, int len);
 void	error(char *s);
 int		ft_atoi(char *s);
 bool	is_space(char s);
+void	ft_clean_mutex(t_data *data, int nb_p);
 bool	is_valid(char *str);
 bool	is_num(char s);
 bool	ret_boolean(t_data *data, bool *set);

@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:58:01 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/25 09:03:20 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:16:54 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ void	ft_usleep(long mili, t_data *data)
 	while (time_now() - i < mili)
 	{
 		if (ret_boolean(data, &data->is_end))
-			break ;
-		//printf("alo \n");
-		usleep(350);
+			return ;
+		usleep(200);
 	}
 }
