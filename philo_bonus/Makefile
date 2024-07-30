@@ -1,6 +1,6 @@
 NAME = philo_bonus
 
-FILES = main.c tool.c
+FILES = main.c tool.c philo_op.c tool1.c
 
 OBJECT = $(FILES:%.c=%.o)
 

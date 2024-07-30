@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:58:59 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/30 12:03:42 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/30 19:12:43 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,19 @@ bool	data_init(t_data *data)
 
 	data->is_end = false;
 	data->is_failed = false;
+	sem_unlink("forks");
+	sem_unlink("full");
+	sem_unlink("end");
+	sem_unlink("write");
 	data->forks = sem_open("forks", O_CREAT, 0644, data->nb_philo);
 	if (data->forks == SEM_FAILED)
 		return (error("sem_open failed"), free(data), false);
 	data->philo = malloc((sizeof(t_philo) * data->nb_philo));
 	if (!data->philo)
 		return (free(data), sem_close(data->forks), error("malloc failed"), 0);
+	data->full = sem_open("full", O_CREAT, 0644, 0);
+	data->end = sem_open("end", O_CREAT, 0644, 0);
+	data->write = sem_open("write", O_CREAT, 0644, 1);
 	i = -1;
 	while (++i < data->nb_philo)
 	{
@@ -82,6 +89,55 @@ bool	handle_input(t_data *data, char **argv)
 	}
 	return (true);
 }
+void	*check_full(void *da)
+{
+	int 	j;
+	t_data	*data;
+
+	j = 0;
+	data = (t_data *)da;
+	while (j < data->nb_philo)
+	{
+		sem_wait(data->full);
+		j++;
+	}
+	sem_post(data->end);
+	return (NULL);
+}
+
+bool	start_dinner(t_data *data)
+{
+	int			i;
+	pid_t		pid;
+	pthread_t	ptd;
+	int			*p;
+
+	i = 0;
+	p = malloc(data->nb_philo);	
+	data->start_time = time_now();
+	while (i < data->nb_philo)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			philo_life(&data->philo[i]);
+		}
+		p[i] = pid;
+		i++;
+	}
+	pthread_create(&ptd, NULL, check_full, data);
+	sem_wait(data->end);
+	pthread_join(ptd, NULL);
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		// printf("killl %d\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", i);
+		if (kill(p[i], SIGQUIT))
+			perror("fsdf ");
+		i++;
+	}
+	return (true);
+}
 
 int main(int argc, char **argv)
 {
@@ -100,4 +156,6 @@ int main(int argc, char **argv)
 		return (0);
 	if (!data_init(data))
 		return (-1);
+	start_dinner(data);
+	return (0);
 }

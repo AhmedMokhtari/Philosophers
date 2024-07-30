@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/30 10:39:16 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:44:53 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PHILO_BONUS_H
 
 # include <stdio.h>
+# include <pthread.h>
+#include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>
@@ -37,8 +39,8 @@ typedef struct s_data
 	bool	is_end;
 	bool	is_failed;
 	sem_t	*forks;
-	sem_t	*lock;
-	sem_t	*bool_lock;
+	sem_t	*full;
+	sem_t	*end;
 	sem_t	*write;
 	t_philo	*philo;
 }	t_data;
@@ -67,5 +69,7 @@ int	ft_atoi(char *s);
 bool	is_space(char s);
 bool	is_num(char s);
 void	error(char *s);
-
+long	time_now(void);
+void	ft_usleep(long mili);
+void	*philo_life(t_philo *philo);
 #endif
