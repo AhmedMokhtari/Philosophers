@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:02:31 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/25 13:04:22 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/27 17:00:18 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,20 @@ void	print_state(t_state state, t_philo *philo)
 	pthread_mutex_lock(&philo->data->write);
 	if (state == taking_fork1
 		&& !ret_boolean(philo->data, &philo->data->is_end))
-		printf("%-4ld %-4d has taken a fork\n", time_span, philo->id);
+		printf("%ld %d has taken a fork\n", time_span, philo->id);
 	else if (state == taking_fork2
 		&& !ret_boolean(philo->data, &philo->data->is_end))
-		printf("%-4ld %-4d has taken a fork\n", time_span, philo->id);
+		printf("%ld %d has taken a fork\n", time_span, philo->id);
 	else if (state == eating && !ret_boolean(philo->data, &philo->data->is_end))
 		printf("%ld %d is eating\n", time_span, philo->id);
 	else if (state == sleeping
 		&& !ret_boolean(philo->data, &philo->data->is_end))
-		printf("%-4ld %-4d is sleeping\n", time_span, philo->id);
+		printf("%ld %d is sleeping\n", time_span, philo->id);
 	else if (state == thinking
 		&& !ret_boolean(philo->data, &philo->data->is_end))
-		printf("%-4ld %-4d is thinking\n", time_span, philo->id);
+		printf("%ld %d is thinking\n", time_span, philo->id);
 	else if (state == dead)
-		printf("%-6ld %-6d dead\n", time_span, philo->id);
+		printf("%ld %d died\n", time_span, philo->id);
 	pthread_mutex_unlock(&philo->data->write);
 }
 
@@ -83,6 +83,12 @@ int	philo_eat(t_philo *philo)
 	return (2);
 }
 
+void	sleep_first(t_philo *philo)
+{
+	print_state(thinking, philo);
+	ft_usleep(philo->data->time_eat, philo->data);
+}
+
 void	*philo_life(void *data)
 {
 	t_philo	*philo;
@@ -94,7 +100,7 @@ void	*philo_life(void *data)
 	if (ret_boolean(philo->data, &philo->data->is_failed))
 		return (NULL);
 	if (philo->id % 2 == 0)
-		ft_usleep(philo->data->time_eat, philo->data);
+		sleep_first(philo);
 	while (true)
 	{
 		ret = philo_eat(philo);

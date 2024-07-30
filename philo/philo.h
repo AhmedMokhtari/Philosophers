@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/25 15:59:48 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/26 09:34:55 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdio.h>
 # include <pthread.h>
+# include <errno.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>

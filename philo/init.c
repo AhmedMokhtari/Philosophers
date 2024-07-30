@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:06:18 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/25 14:18:28 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/07/26 09:23:40 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ bool	is_valid(char *str)
 bool	handle_input(t_data *data, char **argv)
 {
 	data->nb_meals = -1;
-	if (is_valid(argv[1]) && ft_atoi(argv[1]) > 0)
+	if (is_valid(argv[1]) && ft_atoi(argv[1]) >= 0)
 		data->nb_philo = ft_atoi(argv[1]);
 	else
 		return (error("argument not valid"), false);
@@ -107,7 +107,7 @@ bool	handle_input(t_data *data, char **argv)
 		return (error("argument not valid"), false);
 	if (argv[5])
 	{
-		if (is_valid(argv[5]) && ft_atoi(argv[5]) > 0)
+		if (is_valid(argv[5]) && ft_atoi(argv[5]) >= 0)
 			data->nb_meals = ft_atoi(argv[5]);
 		else
 			return (error("argument not valid"), false);
