@@ -24,7 +24,6 @@ long	time_now(void)
 
 bool	check_dead(t_philo *philo)
 {
-	long	last_meal;
 	long	time;
 
 	time = time_now() - philo->last_meal - philo->data->start_time;

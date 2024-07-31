@@ -12,16 +12,22 @@
 
 #include "philo_bonus.h"
 
+void	unlink_sem(void)
+{
+	sem_unlink("forks");
+	sem_unlink("write");
+	sem_unlink("end");
+	sem_unlink("write");
+	sem_unlink("full");
+}
+
 bool	data_init(t_data *data)
 {
 	int	i;
 
 	data->is_end = false;
 	data->is_failed = false;
-	sem_unlink("forks");
-	sem_unlink("full");
-	sem_unlink("end");
-	sem_unlink("write");
+	unlink_sem();
 	data->forks = sem_open("forks", O_CREAT, 0644, data->nb_philo);
 	if (data->forks == SEM_FAILED)
 		return (error("sem_open failed"), free(data), false);
@@ -106,10 +112,7 @@ void	*check_full(t_data *data)
 void	free_data(t_data *data)
 {
 	free(data->philo);
-	sem_unlink("forks");
-	sem_unlink("write");
-	sem_unlink("end");
-	sem_unlink("write");
+	unlink_sem();
 	free(data);
 
 }
@@ -180,9 +183,7 @@ bool	start_dinner(t_data *data)
 int main(int argc, char **argv)
 {
 	t_data	*data;
-	int		i;
 
-	i = 0;
 	if (argc < 5 || argc > 6)
 		return (write(2, "number argument error ", 22), -1);
 	data = malloc(sizeof(t_data));

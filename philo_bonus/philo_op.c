@@ -62,6 +62,8 @@ int	philo_eat(t_philo *philo)
 	// pthread_mutex_lock(philo->left_fork);
 	sem_wait(philo->data->forks);
 	print_state(taking_fork1, philo);
+	if (philo->data->nb_philo == 1)
+		return (ft_usleep(philo->data->time_die, philo), print_state(dead, philo), exit(42), 0);
 	sem_wait(philo->data->forks);
 	print_state(taking_fork2, philo);
 	eat(philo);
@@ -84,7 +86,7 @@ void	sleep_first(t_philo *philo)
 
 void	*philo_life(t_philo *philo)
 {
-	int		ret;
+	// int		ret;
 
 	// while (ret_long(philo->data, &philo->data->start_time) == 0)
 	// 	;
