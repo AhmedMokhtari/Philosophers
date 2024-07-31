@@ -25,6 +25,8 @@
 # include <sys/stat.h>
 # include <errno.h>
 # include <semaphore.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 typedef struct s_philo	t_philo;
 
@@ -70,6 +72,7 @@ bool	is_space(char s);
 bool	is_num(char s);
 void	error(char *s);
 long	time_now(void);
-void	ft_usleep(long mili);
+void	ft_usleep(long mili, t_philo *philo);
 void	*philo_life(t_philo *philo);
+void	print_state(t_state state, t_philo *philo);
 #endif

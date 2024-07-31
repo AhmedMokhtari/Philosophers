@@ -89,13 +89,11 @@ bool	handle_input(t_data *data, char **argv)
 	}
 	return (true);
 }
-void	*check_full(void *da)
+void	*check_full(t_data *data)
 {
 	int 	j;
-	t_data	*data;
 
 	j = 0;
-	data = (t_data *)da;
 	while (j < data->nb_philo)
 	{
 		sem_wait(data->full);
@@ -105,37 +103,77 @@ void	*check_full(void *da)
 	return (NULL);
 }
 
+void	free_data(t_data *data)
+{
+	free(data->philo);
+	sem_unlink("forks");
+	sem_unlink("write");
+	sem_unlink("end");
+	sem_unlink("write");
+	free(data);
+
+}
+void	kill_all(t_data *data, int *p)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		// printf("killl %d\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", i);
+		// kill(p[i], SIGQUIT);
+		if (kill(p[i], SIGKILL))
+			perror("fsdf ");
+		i++;
+	}
+	free_data(data);
+	free(p);
+}
+
+void	check_philo(int *pid, t_data *data)
+{
+	int	i;
+	int	status;
+
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		waitpid(-1, &status, 0);
+		if (WEXITSTATUS(status) == 42)
+		{
+			kill_all(data, pid);
+			exit(0);
+		}
+		i++;
+	}
+}
+
 bool	start_dinner(t_data *data)
 {
 	int			i;
 	pid_t		pid;
-	pthread_t	ptd;
 	int			*p;
 
 	i = 0;
-	p = malloc(data->nb_philo);	
+	p = malloc(data->nb_philo * sizeof(int));
+	if (!p)
+		return (false);
 	data->start_time = time_now();
 	while (i < data->nb_philo)
 	{
 		pid = fork();
 		if (pid == 0)
-		{
 			philo_life(&data->philo[i]);
-		}
 		p[i] = pid;
 		i++;
 	}
-	pthread_create(&ptd, NULL, check_full, data);
+	check_philo(p, data);
+	if (data->nb_meals > -1)
+		check_full(data);
 	sem_wait(data->end);
-	pthread_join(ptd, NULL);
-	i = 0;
-	while (i < data->nb_philo)
-	{
-		// printf("killl %d\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", i);
-		if (kill(p[i], SIGQUIT))
-			perror("fsdf ");
-		i++;
-	}
+	free_data(data);
+	free(p);
+	// kill_all(data, p);	
 	return (true);
 }
 
@@ -157,5 +195,7 @@ int main(int argc, char **argv)
 	if (!data_init(data))
 		return (-1);
 	start_dinner(data);
+	// free(data->philo);
+	// free(data);
 	return (0);
 }

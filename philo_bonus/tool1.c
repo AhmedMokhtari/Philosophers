@@ -22,13 +22,29 @@ long	time_now(void)
 	return (time);
 }
 
-void	ft_usleep(long mili)
+bool	check_dead(t_philo *philo)
+{
+	long	last_meal;
+	long	time;
+
+	time = time_now() - philo->last_meal - philo->data->start_time;
+	if (time > philo->data->time_die)
+	{
+		print_state(dead, philo);
+		sem_wait(philo->data->write);
+		exit(42);
+	}
+	return (false);
+}
+
+void	ft_usleep(long mili, t_philo *philo)
 {
 	long	i;
 
 	i = time_now();
 	while (time_now() - i < mili)
 	{
-		usleep(300);
+		if (!check_dead(philo))
+			usleep(300);
 	}
 }

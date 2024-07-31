@@ -43,7 +43,7 @@ void	eat(t_philo *philo)
 
 	start = philo->data->start_time;
 	print_state(eating, philo);
-	ft_usleep(philo->data->time_eat);
+	ft_usleep(philo->data->time_eat, philo);
 	philo->last_meal = time_now() - start;
 	philo->meals_eat++;
 	b = philo->data->nb_meals != -1;
@@ -51,16 +51,14 @@ void	eat(t_philo *philo)
 	{
 		philo->is_full = true;
 		sem_post(philo->data->full);
-		// sem_post(philo->data->forks);
-		// sem_post(philo->data->forks);
-		// exit(5);
+		sem_post(philo->data->forks);
+		sem_post(philo->data->forks);
+		exit(0);
 	}
 }
 
 int	philo_eat(t_philo *philo)
 {
-	if (philo->is_full)
-		return (1);
 	// pthread_mutex_lock(philo->left_fork);
 	sem_wait(philo->data->forks);
 	print_state(taking_fork1, philo);
@@ -81,7 +79,7 @@ int	philo_eat(t_philo *philo)
 void	sleep_first(t_philo *philo)
 {
 	print_state(thinking, philo);
-	ft_usleep(philo->data->time_eat);
+	ft_usleep(50, philo);
 }
 
 void	*philo_life(t_philo *philo)
@@ -96,15 +94,16 @@ void	*philo_life(t_philo *philo)
 		sleep_first(philo);
 	while (true)
 	{
-		ret = philo_eat(philo);
-		if (ret == 0)
-			return (NULL);
-		else if (ret == 1)
-			break ;
+		// ret = philo_eat(philo);
+		philo_eat(philo);
+		// if (ret == 0)
+		// 	return (NULL);
+		// else if (ret == 1)
+		// 	break ;
 		print_state(sleeping, philo);
-		ft_usleep(philo->data->time_sleep);
-		if (philo->data->is_end)
-			break ;
+		ft_usleep(philo->data->time_sleep, philo);
+		// if (philo->data->is_end)
+		// 	break ;
 		print_state(thinking, philo);
 	}
 	exit(0);

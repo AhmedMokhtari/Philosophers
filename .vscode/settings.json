@@ -17,6 +17,7 @@
 		"type_traits": "c",
 		"pthread.h": "c",
 		"philo.h": "c",
-		"philo_bonus.h": "c"
+		"philo_bonus.h": "c",
+		"stat.h": "c"
 	}
 }
