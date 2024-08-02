@@ -1,12 +1,12 @@
 NAME = philo_bonus
 
-FILES = main.c tool.c philo_op.c tool1.c
+FILES = main.c tool.c philo_op.c tool1.c tool2.c init.c
 
 OBJECT = $(FILES:%.c=%.o)
 
 CC = cc
 
-CFLAGS = -g  -fsanitize=thread -Wall -Wextra -Werror # -pthread -Wall -Wextra -Werror #-g #-fsanitize=address #-fsanitize=thread 
+CFLAGS = #-g  -fsanitize=thread -Wall -Wextra -Werror # -pthread -Wall -Wextra -Werror #-g #-fsanitize=address #-fsanitize=thread 
 
 all : $(NAME)
 

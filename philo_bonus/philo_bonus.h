@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/30 18:44:53 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/02 09:40:39 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdio.h>
 # include <pthread.h>
-#include <signal.h>
+# include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>
@@ -41,6 +41,7 @@ typedef struct s_data
 	bool	is_end;
 	bool	is_failed;
 	sem_t	*forks;
+	sem_t	*all_ready;
 	sem_t	*full;
 	sem_t	*end;
 	sem_t	*write;
@@ -67,12 +68,19 @@ typedef struct s_philo
 	t_data			*data;
 }	t_philo;
 
-int	ft_atoi(char *s);
+int		ft_atoi(char *s);
 bool	is_space(char s);
 bool	is_num(char s);
 void	error(char *s);
 long	time_now(void);
 void	ft_usleep(long mili, t_philo *philo);
-void	*philo_life(t_philo *philo);
+void	philo_life(t_philo *philo);
 void	print_state(t_state state, t_philo *philo);
+void	free_data(t_data *data);
+void	kill_all(t_data *data, int *p);
+bool	handle_input(t_data *data, char **argv);
+bool	data_init(t_data *data, int i);
+void	*check_full(t_data *data);
+void	unlink_sem(void);
+
 #endif

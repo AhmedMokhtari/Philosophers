@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:02:31 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/27 17:00:18 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/02 13:29:36 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	eat(t_philo *philo)
 
 	meals_eat = -1;
 	start = philo->data->start_time;
+	set_long(philo->data, &philo->last_meal, time_now() - start);
 	print_state(eating, philo);
 	ft_usleep(philo->data->time_eat, philo->data);
-	set_long(philo->data, &philo->last_meal, time_now() - start);
 	pthread_mutex_lock(&philo->data->lock);
 	philo->meals_eat++;
 	pthread_mutex_unlock(&philo->data->lock);
