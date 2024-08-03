@@ -6,7 +6,7 @@ OBJECT = $(FILES:%.c=%.o)
 
 CC = cc
 
-CFLAGS = -g  #-fsanitize=address  -pthread -Wall -Wextra -Werror #-g #-fsanitize=address #-fsanitize=thread 
+CFLAGS = -Wall -Wextra -Werror
 
 all : $(NAME)
 
