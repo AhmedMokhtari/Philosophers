@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:58:59 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/08/02 18:36:00 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/03 11:48:25 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	main(int argc, char **argv)
 	if (!handle_input(data, argv))
 		return (free(data), -1);
 	if (data->nb_meals == 0 || data->nb_philo == 0)
-		return (0);
+		return (free(data), 0);
 	if (!data_init(data, -1))
 		return (-1);
 	if (!start_dinner(data, 0))

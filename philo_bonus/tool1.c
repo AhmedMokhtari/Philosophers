@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:58:01 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/08/02 10:08:23 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/03 11:23:31 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_usleep(long mili, t_philo *philo)
 	while (time_now() - i < mili)
 	{
 		if (!check_dead(philo))
-			usleep(500);
+			usleep(100);
 	}
 }
 

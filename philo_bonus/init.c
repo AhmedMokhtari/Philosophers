@@ -6,17 +6,14 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 11:53:45 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/08/02 09:40:15 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/03 11:51:47 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-bool	data_init(t_data *data, int i)
+bool	open_seem(t_data *data)
 {
-	data->is_end = false;
-	data->is_failed = false;
-	unlink_sem();
 	data->forks = sem_open("forks", O_CREAT, 0644, data->nb_philo);
 	data->full = sem_open("full", O_CREAT, 0644, 0);
 	data->end = sem_open("end", O_CREAT, 0644, 0);
@@ -26,6 +23,18 @@ bool	data_init(t_data *data, int i)
 		|| data->end == SEM_FAILED || data->write == SEM_FAILED
 		|| data->all_ready == SEM_FAILED)
 		return (error("sem_open failed"), free(data), false);
+	return (true);
+}
+
+bool	data_init(t_data *data, int i)
+{
+	data->is_end = false;
+	data->is_failed = false;
+	unlink_sem();
+	data->time_think = data->time_eat - data->time_sleep;
+	data->time_think += data->time_eat * (data->nb_philo % 2);
+	if (!open_seem(data))
+		return (false);
 	data->philo = malloc((sizeof(t_philo) * data->nb_philo));
 	if (!data->philo)
 		return (free(data), unlink_sem(), error("malloc failed"), 0);

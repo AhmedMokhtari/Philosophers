@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:17 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/07/27 17:02:17 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/03 11:52:30 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ft_clean_mutex(t_data *data, int nb_p)
 	free(data);
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char **argv)
 {
 	t_data	*data;
 	int		i;
@@ -119,7 +119,7 @@ int	main(int argc, char *argv[])
 	if (!handle_input(data, argv))
 		return (free(data), -1);
 	if (data->nb_meals == 0)
-		return (0);
+		return (free(data), 0);
 	if (!data_init(data))
 		return (-1);
 	if (!start_dinner(data, 0))

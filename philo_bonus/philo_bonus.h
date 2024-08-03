@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 09:56:13 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/08/02 09:40:39 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/03 11:34:04 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_data
 	long	time_sleep;
 	long	time_eat;
 	long	nb_meals;
+	long	time_think;
 	long	start_time;
 	bool	is_end;
 	bool	is_failed;
@@ -82,5 +83,6 @@ bool	handle_input(t_data *data, char **argv);
 bool	data_init(t_data *data, int i);
 void	*check_full(t_data *data);
 void	unlink_sem(void);
+bool	check_dead(t_philo *philo);
 
 #endif

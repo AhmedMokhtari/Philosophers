@@ -6,7 +6,7 @@
 /*   By: amokhtar <amokhtar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 18:02:31 by amokhtar          #+#    #+#             */
-/*   Updated: 2024/08/02 15:17:46 by amokhtar         ###   ########.fr       */
+/*   Updated: 2024/08/03 11:48:56 by amokhtar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,10 @@ void	print_state(t_state state, t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	long	start;
 	bool	b;
 
-	start = philo->data->start_time;
-	philo->last_meal = time_now() - start;
 	print_state(eating, philo);
+	philo->last_meal = time_now() - philo->data->start_time;
 	ft_usleep(philo->data->time_eat, philo);
 	philo->meals_eat++;
 	b = philo->data->nb_meals != -1;
@@ -92,6 +90,7 @@ void	philo_life(t_philo *philo)
 		print_state(sleeping, philo);
 		ft_usleep(philo->data->time_sleep, philo);
 		print_state(thinking, philo);
+		ft_usleep(philo->data->time_think, philo);
 	}
 	exit(0);
 	return ;
